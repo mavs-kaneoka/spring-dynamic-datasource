@@ -1,0 +1,31 @@
+version: "3"
+services:
+  api:
+    container_name: sample-api
+    image: amazoncorretto:17
+    tty: true
+    volumes:
+      - ./api:/usr/src/app
+    working_dir: /usr/src/app
+    command: sh -c "cd /usr/src/app && ./gradlew bootRun"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    container_name: sample-db
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: system
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_password
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      TZ: Asia/Tokyo
+    volumes:
+      - db_volume:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+volumes:
+  db_volume:

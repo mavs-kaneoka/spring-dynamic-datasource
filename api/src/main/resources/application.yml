@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    # システム共通データベース
+    system:
+      url: jdbc:mysql://db/system
+      username: mysql_user
+      password: mysql_password
+    # テナントデータベース
+    tenant:
+      url: jdbc:mysql://db/tenant01
+      username: mysql_user
+      password: mysql_password
+  jpa:
+    show-sql: true
+  sql:
+    init:
+      mode: always
+server:
+  port: 8080
+timeout:
+  connect: 10
+  read: 10
