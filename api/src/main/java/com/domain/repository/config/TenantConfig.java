@@ -60,6 +60,8 @@ public class TenantConfig {
         dataSource.setTargetDataSources(targetDataSources);
         dataSource.setDefaultTargetDataSource(defaultTargetDataSource);
         dataSource.afterPropertiesSet();
+
+        DynamicRoutingDataSource.setCurrentLookupKey("tenant");
         return dataSource;
     }
 

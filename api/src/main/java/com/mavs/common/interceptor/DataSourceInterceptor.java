@@ -56,6 +56,7 @@ public class DataSourceInterceptor implements HandlerInterceptor {
         dynamicRoutingDataSource.setDefaultTargetDataSource(this.dataSource);
         dynamicRoutingDataSource.afterPropertiesSet();
 
+        DynamicRoutingDataSource.setCurrentLookupKey(tenantId);
         return true;
     }
 

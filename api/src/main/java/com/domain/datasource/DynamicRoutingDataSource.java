@@ -7,6 +7,33 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * データソースを動的に切り替えるためのクラス
  */
 public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
+    /** データソースのキー用のThreadLocal */
+    private static final ThreadLocal<Object> currentLookupKey = new ThreadLocal<>();
+
+    /**
+     * データソース動的切り替えメソッド
+     */
+    @Override
+    protected Object determineCurrentLookupKey() {
+        // ThreadLocalから現在のキーを取得
+        return currentLookupKey.get();
+    }
+
+    /**
+     * 現在のスレッドに関連付けられたデータソースのキーを設定
+     */
+    public static void setCurrentLookupKey(Object lookupKey) {
+        currentLookupKey.set(lookupKey);
+    }
+
+    /**
+     * 現在のスレッドに関連付けられたデータソースのキーをクリア
+     */
+    public static void clearCurrentLookupKey() {
+        currentLookupKey.remove();
+        currentLookupKey.set(null);
+    }
+
     /**
      * データソースをクリア
      */
@@ -15,15 +42,5 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
             setTargetDataSources(new HashMap<>());
             super.afterPropertiesSet();
         }
-    }
-
-    /**
-     * データソース動的切り替えメソッド
-     * 
-     * 今回は使用していないが、オーバーライドしないとエラーになるため、空Objectを返却している
-     */
-    @Override
-    protected Object determineCurrentLookupKey() {
-        return new Object();
     }
 }
